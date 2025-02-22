@@ -32,54 +32,42 @@ export class TicketService {
     startDate: string,
     endDate: string,
   ) {
-    const start = new Date(startDate).toISOString();
-    const end = new Date(endDate).toISOString();
+    const passenger = await this.passengerService.findOne(passengerId);
 
-    const bookedBeforeFlownNow = await this.ticketRepository.find({
-      where: {
-        passenger: { id: passengerId },
-        bookingDate: LessThan(start),
-        departureDate: Between(start, end),
-      },
-    });
+    const queryBuilder = this.ticketRepository.createQueryBuilder('ticket');
 
-    const bookedNowNotFlown = await this.ticketRepository.find({
-      where: {
-        passenger: { id: passengerId },
-        bookingDate: Between(start, end),
-        departureDate: MoreThan(end),
-      },
-    });
+    const bookedBeforeFlownNow = await queryBuilder
+      .where('ticket.bookingDate < :startDate', { startDate })
+      .andWhere('ticket.departureDate BETWEEN :startDate AND :endDate', {
+        startDate,
+        endDate,
+      })
+      .getMany();
 
-    const bookedNowFlownNow = await this.ticketRepository.find({
-      where: {
-        passenger: { id: passengerId },
-        bookingDate: Between(start, end),
-        departureDate: Between(start, end),
-      },
-    });
+    const bookedNowNotFlown = await queryBuilder
+      .where('ticket.bookingDate BETWEEN :startDate AND :endDate', {
+        startDate,
+        endDate,
+      })
+      .andWhere('ticket.departureDate > :endDate', { endDate })
+      .getMany();
+
+    const bookedNowFlownNow = await queryBuilder
+      .where('ticket.bookingDate BETWEEN :startDate AND :endDate', {
+        startDate,
+        endDate,
+      })
+      .andWhere('ticket.departureDate BETWEEN :startDate AND :endDate', {
+        startDate,
+        endDate,
+      })
+      .getMany();
 
     return {
-      bookedBeforeFlownNow: bookedBeforeFlownNow.map((ticket) =>
-        this.formatTicket(ticket),
-      ),
-      bookedNowNotFlown: bookedNowNotFlown.map((ticket) =>
-        this.formatTicket(ticket),
-      ),
-      bookedNowFlownNow: bookedNowFlownNow.map((ticket) =>
-        this.formatTicket(ticket),
-      ),
-    };
-  }
-
-  private formatTicket(ticket: Ticket) {
-    return {
-      bookingDate: ticket.bookingDate,
-      departureDate: ticket.departureDate,
-      orderNumber: ticket.orderNumber,
-      from: ticket.departure,
-      to: ticket.destination,
-      serviceProvided: !!ticket.arrivalDate,
+      passenger,
+      bookedBeforeFlownNow,
+      bookedNowNotFlown,
+      bookedNowFlownNow,
     };
   }
 
