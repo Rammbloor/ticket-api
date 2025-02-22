@@ -18,7 +18,7 @@ export class Document {
   documentType: string;
 
   @ApiProperty({ example: '123456', description: 'Номер документа' })
-  @Column({  name: 'document_number' })
+  @Column({ name: 'document_number' })
   documentNumber: string;
 
   @ManyToOne(() => Passenger, (passenger) => passenger.documents, {

@@ -56,10 +56,15 @@ export class TicketController {
   }
 
   @ApiOperation({ summary: 'Получение отчета о полетах пассажира' })
-  @ApiResponse({ status: 200, description: 'Отчет о билетах пассажира успешно получен' })
+  @ApiResponse({
+    status: 200,
+    description: 'Отчет о билетах пассажира успешно получен',
+  })
   @Get('report/:passengerId')
-  public async getPassengerReport(@Param('passengerId') passengerId: string, @Body() getPassengerReport: GetPassengerReportDto,) {
-
+  public async getPassengerReport(
+    @Param('passengerId') passengerId: string,
+    @Body() getPassengerReport: GetPassengerReportDto,
+  ) {
     return this.ticketService.getPassengerReport(
       passengerId,
       getPassengerReport.startDate,

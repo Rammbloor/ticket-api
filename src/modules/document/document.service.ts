@@ -48,7 +48,10 @@ export class DocumentService {
   }
 
   public async findOne(id: string) {
-    const document = await this.documentRepository.findOne({ where: { id },relations: ['passenger'] });
+    const document = await this.documentRepository.findOne({
+      where: { id },
+      relations: ['passenger'],
+    });
     if (!document) {
       throw new NotFoundException('Документ не найден');
     }

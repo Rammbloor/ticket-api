@@ -84,7 +84,9 @@ export class TicketService {
   }
 
   public async findAll() {
-    const tickets = await this.ticketRepository.find({ relations: ['passenger'] });
+    const tickets = await this.ticketRepository.find({
+      relations: ['passenger'],
+    });
     if (tickets.length === 0) {
       throw new NotFoundException('Билеты не найдены');
     }
