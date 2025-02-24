@@ -80,10 +80,7 @@ export class TicketController {
   })
   @Patch(':id')
   @UsePipes(new ValidationPipe({ whitelist: true }))
-  public async update(
-    @Param('id') id: string,
-    @Body() updateTicketDto: UpdateTicketDto,
-  ) {
+  public async update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
     return this.ticketService.update(id, updateTicketDto);
   }
 

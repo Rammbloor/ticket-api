@@ -69,10 +69,7 @@ export class PassengerController {
   })
   @Patch(':id')
   @UsePipes(new ValidationPipe({ whitelist: true }))
-  public async update(
-    @Param('id') id: string,
-    @Body() updatePassengerDto: UpdatePassengerDto,
-  ) {
+  public async update(@Param('id') id: string, @Body() updatePassengerDto: UpdatePassengerDto) {
     return this.passengerService.update(id, updatePassengerDto);
   }
 

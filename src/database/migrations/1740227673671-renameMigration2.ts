@@ -10,12 +10,8 @@ export class RenameMigration21740227673671 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "document" DROP CONSTRAINT "FK_ae6cd2db50c8b2dfcad4fe08d72"`,
     );
-    await queryRunner.query(
-      `ALTER TABLE "passenger" RENAME COLUMN "ticketId" TO "ticket_id"`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "document" RENAME COLUMN "passengerId" TO "passenger_id"`,
-    );
+    await queryRunner.query(`ALTER TABLE "passenger" RENAME COLUMN "ticketId" TO "ticket_id"`);
+    await queryRunner.query(`ALTER TABLE "document" RENAME COLUMN "passengerId" TO "passenger_id"`);
     await queryRunner.query(
       `ALTER TABLE "passenger" ADD CONSTRAINT "FK_83a9e00e108f189d9e748da92a1" FOREIGN KEY ("ticket_id") REFERENCES "ticket"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
@@ -31,12 +27,8 @@ export class RenameMigration21740227673671 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "passenger" DROP CONSTRAINT "FK_83a9e00e108f189d9e748da92a1"`,
     );
-    await queryRunner.query(
-      `ALTER TABLE "document" RENAME COLUMN "passenger_id" TO "passengerId"`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "passenger" RENAME COLUMN "ticket_id" TO "ticketId"`,
-    );
+    await queryRunner.query(`ALTER TABLE "document" RENAME COLUMN "passenger_id" TO "passengerId"`);
+    await queryRunner.query(`ALTER TABLE "passenger" RENAME COLUMN "ticket_id" TO "ticketId"`);
     await queryRunner.query(
       `ALTER TABLE "document" ADD CONSTRAINT "FK_ae6cd2db50c8b2dfcad4fe08d72" FOREIGN KEY ("passengerId") REFERENCES "passenger"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
     );

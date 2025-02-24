@@ -61,10 +61,7 @@ export class DocumentController {
   })
   @Patch(':id')
   @UsePipes(new ValidationPipe({ whitelist: true }))
-  public async update(
-    @Param('id') id: string,
-    @Body() updateDocumentDto: UpdateDocumentDto,
-  ) {
+  public async update(@Param('id') id: string, @Body() updateDocumentDto: UpdateDocumentDto) {
     return this.documentService.update(id, updateDocumentDto);
   }
 

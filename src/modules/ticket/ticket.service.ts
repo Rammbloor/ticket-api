@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
-import { Between, LessThan, MoreThan, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Ticket } from './entities/ticket.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PassengerService } from '../passenger/passenger.service';
@@ -16,9 +16,7 @@ export class TicketService {
   public async create(createTicketDto: CreateTicketDto) {
     const ticket = this.ticketRepository.create(createTicketDto);
     if (createTicketDto.passengerId) {
-      const passenger = await this.passengerService.findOne(
-        createTicketDto.passengerId,
-      );
+      const passenger = await this.passengerService.findOne(createTicketDto.passengerId);
       if (!passenger) {
         throw new NotFoundException('Пассажир не найден');
       }
@@ -27,11 +25,7 @@ export class TicketService {
     return this.ticketRepository.save(ticket);
   }
 
-  public async getPassengerReport(
-    passengerId: string,
-    startDate: string,
-    endDate: string,
-  ) {
+  public async getPassengerReport(passengerId: string, startDate: string, endDate: string) {
     const passenger = await this.passengerService.findOne(passengerId);
 
     const queryBuilder = this.ticketRepository.createQueryBuilder('ticket');
@@ -97,9 +91,7 @@ export class TicketService {
   public async update(id: string, updateTicketDto: UpdateTicketDto) {
     let ticket = await this.findOne(id);
     if (updateTicketDto.passengerId) {
-      const passenger = await this.passengerService.findOne(
-        updateTicketDto.passengerId,
-      );
+      const passenger = await this.passengerService.findOne(updateTicketDto.passengerId);
       if (!passenger) {
         throw new NotFoundException('Пассажир не найден');
       }

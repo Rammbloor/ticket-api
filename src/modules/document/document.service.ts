@@ -17,9 +17,7 @@ export class DocumentService {
   public async create(createDocumentDto: CreateDocumentDto) {
     const document = this.documentRepository.create(createDocumentDto);
     if (createDocumentDto.passengerId) {
-      const passenger = await this.passengerService.findOne(
-        createDocumentDto.passengerId,
-      );
+      const passenger = await this.passengerService.findOne(createDocumentDto.passengerId);
       if (!passenger) {
         throw new NotFoundException('Пассажир не найден');
       }
@@ -61,9 +59,7 @@ export class DocumentService {
   public async update(id: string, updateDocumentDto: UpdateDocumentDto) {
     let document = await this.findOne(id);
     if (updateDocumentDto.passengerId) {
-      const passenger = await this.passengerService.findOne(
-        updateDocumentDto.passengerId,
-      );
+      const passenger = await this.passengerService.findOne(updateDocumentDto.passengerId);
       if (!passenger) {
         throw new NotFoundException('Пассажир не найден');
       }
